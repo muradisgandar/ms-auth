@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert mock users
+      author: Murad Isgandarli
+      changes:
+        - insert:
+            columns:
+              - column:
+                  name: created_at
+                  value: now()
+              - column:
+                  name: updated_at
+                  value: now()
+              - column:
+                  name:  email
+                  value: rahimov.mahammad.s@gmail.com
+              - column:
+                  name: name
+                  value: Mahammad
+              - column:
+                  name: password
+                  value: $2a$10$5zwyNgaZHutcrlKd7vPbxeV/ptSJqohQsigwDerdvj2Px7paDVzGe
+              - column:
+                  name: role
+                  value: ROLE_ADMIN
+              - column:
+                  name: status
+                  value: CONFIRMED
+              - column:
+                  name: surname
+                  value: Rahimov
+              - column:
+                  name: username
+                  value: rahimov.mahammad.s@gmail.com
+            tableName: users
+            remarks: insert mock admin user in users
