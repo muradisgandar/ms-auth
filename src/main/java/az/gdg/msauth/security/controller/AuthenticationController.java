@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/auth")
 @RestController
-@CrossOrigin
+@CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
 @Api(value = "Authentication Controller")
 public class AuthenticationController {
 
