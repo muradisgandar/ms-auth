@@ -23,7 +23,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(exposedHeaders = "Access-Control-Allow-*")
+@CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
 @Api("User Controller")
 public class UserController {
 
