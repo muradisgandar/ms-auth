@@ -12,6 +12,14 @@ spring:
     url: jdbc:mysql://localhost:3306/msauth?createDatabaseIfNotExist=true
     username: root
     password: root12345
+  rabbitmq:
+    addresses: xxx
+  cloud:
+    stream:
+      bindings:
+        output:
+          destination: mail
+          group: mail-gorup
   jpa:
     database: mysql
     hibernate:
