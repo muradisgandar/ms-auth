@@ -48,6 +48,7 @@ dependencies {
 			'org.springframework.boot:spring-boot-starter-test'
 	)
 	testCompile platform("org.spockframework:spock-bom:2.0-M1-groovy-2.5")
+	compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-rabbit', version: '3.0.3.RELEASE'
 
 	testImplementation 'org.springframework.security:spring-security-test'
 }

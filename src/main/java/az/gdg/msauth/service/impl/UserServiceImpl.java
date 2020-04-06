@@ -1,6 +1,7 @@
 package az.gdg.msauth.service.impl;
 
 import az.gdg.msauth.dao.UserRepository;
+import az.gdg.msauth.model.dto.MailDTO;
 import az.gdg.msauth.model.dto.UserDTO;
 import az.gdg.msauth.model.entity.UserEntity;
 import az.gdg.msauth.exception.WrongDataException;
@@ -9,6 +10,7 @@ import az.gdg.msauth.security.model.dto.UserInfo;
 import az.gdg.msauth.security.exception.AuthenticationException;
 import az.gdg.msauth.security.model.Role;
 import az.gdg.msauth.security.service.AuthenticationService;
+import az.gdg.msauth.service.EmailService;
 import az.gdg.msauth.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,15 +23,27 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final AuthenticationService authenticationService;
+    private final EmailService emailService;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    public UserServiceImpl(UserRepository userRepository, AuthenticationService authenticationService) {
+    public UserServiceImpl(UserRepository userRepository, AuthenticationService authenticationService,
+                           EmailService emailService) {
         this.userRepository = userRepository;
         this.authenticationService = authenticationService;
+        this.emailService = emailService;
     }
 
     public void signUp(UserDTO userDTO) {
         logger.info("ActionLog.Sign up user.Start");
+
+        MailDTO mail = new MailDTO().builder()
+                .mailTo(userDTO.getEmail())
+                .mailSubject("Your registration letter")
+                .mailBody("<html><body>You are registered for our app</body></html>")
+                .build();
+
+        emailService.sendToQueue(mail);
+
         UserEntity checkedEmail = userRepository.findByEmail(userDTO.getEmail());
         if (checkedEmail != null) {
             logger.error("ActionLog.WrongDataException.Thrown");
