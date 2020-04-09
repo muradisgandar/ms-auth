@@ -5,6 +5,9 @@ logging:
     org:
       springframework:
         web: DEBUG
+cleardb:
+  database:
+    url: xxx
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
