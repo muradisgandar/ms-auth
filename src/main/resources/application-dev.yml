@@ -6,7 +6,7 @@ logging:
       springframework:
         web: DEBUG
 cleardb:
-  database:
+  colorful:
     url: xxx
 spring:
   datasource:
