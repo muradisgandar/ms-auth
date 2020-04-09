@@ -6,9 +6,8 @@ logging:
       springframework:
         web: DEBUG
 cleardb:
-  database:
-    url:
-      production: xxx
+  cyan:
+    url: xxx
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
