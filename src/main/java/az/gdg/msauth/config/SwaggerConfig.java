@@ -14,7 +14,7 @@ import java.util.Collections;
 
 @Configuration
 @EnableSwagger2
-//@Profile("!prod")
+@Profile("!prod")
 public class SwaggerConfig {
 
     @Bean
