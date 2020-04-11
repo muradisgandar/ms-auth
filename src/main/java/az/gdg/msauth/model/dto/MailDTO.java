@@ -5,13 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class MailDTO {
 
-    private String mailTo;
+    private List<String> mailTo;
     private String mailSubject;
     private String mailBody;
 }

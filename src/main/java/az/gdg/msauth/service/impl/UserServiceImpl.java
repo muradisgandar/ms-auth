@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -37,7 +39,7 @@ public class UserServiceImpl implements UserService {
         logger.info("ActionLog.Sign up user.Start");
 
         MailDTO mail = new MailDTO().builder()
-                .mailTo(userDTO.getEmail())
+                .mailTo(Collections.singletonList(userDTO.getEmail()))
                 .mailSubject("Your registration letter")
                 .mailBody("<html><body>You are registered for our app</body></html>")
                 .build();
