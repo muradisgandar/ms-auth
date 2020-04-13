@@ -12,6 +12,7 @@ import az.gdg.msauth.security.model.Role;
 import az.gdg.msauth.security.service.AuthenticationService;
 import az.gdg.msauth.service.EmailService;
 import az.gdg.msauth.service.UserService;
+import az.gdg.msauth.util.VerifyCodeGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
         }
 
         String password = new BCryptPasswordEncoder().encode(userDTO.getPassword());
-        String code = UUID.randomUUID().toString();
+        String code = VerifyCodeGenerator.generatedCode();
         UserEntity userEntity = UserEntity
                 .builder()
                 .name(userDTO.getName())
@@ -65,8 +66,9 @@ public class UserServiceImpl implements UserService {
                 .mailTo(Collections.singletonList(userDTO.getEmail()))
                 .mailSubject("Your registration letter")
                 .mailBody("<h2>" + "Verify Account" + "</h2>" + "</br>" +
+                        "<a href=" +
                         "https://ms-gdg-auth.herokuapp.com/user/verify?email=" + userDTO.getEmail() +
-                        "&code=" + code)
+                        "&code=" + code + "></a>")
                 .build();
 
         emailService.sendToQueue(mail);
