@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         }
 
         String password = new BCryptPasswordEncoder().encode(userDTO.getPassword());
-        String code = VerifyCodeGenerator.generatedCode();
+        String code = VerifyCodeGenerator.generateCode();
         UserEntity userEntity = UserEntity
                 .builder()
                 .name(userDTO.getName())
@@ -107,6 +107,7 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             if (user.getVerifyCode().equals(code)) {
                 user.setStatus(Status.CONFIRMED);
+                user.setVerifyCode(VerifyCodeGenerator.generateCode());
                 userRepository.save(user);
             } else {
                 throw new WrongDataException("Verification code is not valid!");

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class VerifyCodeGenerator {
 
-    public static String generatedCode() {
+    public static String generateCode() {
         int leftLimit = 48;
         int rightLimit = 122;
         int targetStringLength = 46;
