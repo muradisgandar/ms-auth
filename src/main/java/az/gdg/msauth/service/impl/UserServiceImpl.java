@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
         UserEntity user = userRepository.findByEmail(email);
 
         if (user != null) {
-            if (!user.getStatus().equals(Status.CONFIRMED)) {
+            if (user.getVerifyCode().equals(code)) {
                 user.setStatus(Status.CONFIRMED);
                 userRepository.save(user);
             }
