@@ -68,7 +68,9 @@ public class UserServiceImpl implements UserService {
                 .mailBody("<h2>" + "Verify Account" + "</h2>" + "</br>" +
                         "<a href=" +
                         "https://ms-gdg-auth.herokuapp.com/user/verify?email=" + userDTO.getEmail() +
-                        "&code=" + code + "></a>")
+                        "&code=" + code + ">" +
+                        "https://ms-gdg-auth.herokuapp.com/user/verify?email=" + userDTO.getEmail() +
+                        "&code=" + code + "</a>")
                 .build();
 
         emailService.sendToQueue(mail);
