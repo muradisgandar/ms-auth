@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.UUID;
 
 
 @Service
@@ -38,14 +39,6 @@ public class UserServiceImpl implements UserService {
     public void signUp(UserDTO userDTO) {
         logger.info("ActionLog.Sign up user.Start");
 
-        MailDTO mail = new MailDTO().builder()
-                .mailTo(Collections.singletonList(userDTO.getEmail()))
-                .mailSubject("Your registration letter")
-                .mailBody("<html><body>You are registered for our app</body></html>")
-                .build();
-
-        emailService.sendToQueue(mail);
-
         UserEntity checkedEmail = userRepository.findByEmail(userDTO.getEmail());
         if (checkedEmail != null) {
             logger.error("ActionLog.WrongDataException.Thrown");
@@ -53,6 +46,7 @@ public class UserServiceImpl implements UserService {
         }
 
         String password = new BCryptPasswordEncoder().encode(userDTO.getPassword());
+        String code = UUID.randomUUID().toString();
         UserEntity userEntity = UserEntity
                 .builder()
                 .name(userDTO.getName())
@@ -60,11 +54,23 @@ public class UserServiceImpl implements UserService {
                 .username(userDTO.getEmail())
                 .email(userDTO.getEmail())
                 .password(password)
+                .verifyCode(code)
                 .role(Role.ROLE_USER)
                 .status(Status.REGISTERED)
                 .build();
 
         userRepository.save(userEntity);
+
+        MailDTO mail = new MailDTO().builder()
+                .mailTo(Collections.singletonList(userDTO.getEmail()))
+                .mailSubject("Your registration letter")
+                .mailBody("<h2>" + "Verify Account" + "</h2>" + "</br>"
+                + "https://ms-gdg-auth.herokuapp.com/user/verify?email=" + userDTO.getEmail()
+                + "&code=" + code)
+                .build();
+
+        emailService.sendToQueue(mail);
+
         logger.info("ActionLog.Sign up user.Stop.Success");
 
     }
@@ -87,5 +93,21 @@ public class UserServiceImpl implements UserService {
             throw new WrongDataException("No such email is found");
         }
 
+    }
+
+    @Override
+    public void verifyAccount(String email, String code) {
+
+        UserEntity user = userRepository.findByEmail(email);
+
+        if(user!=null){
+            if(!user.getStatus().equals(Status.CONFIRMED)){
+                user.setStatus(Status.CONFIRMED);
+                userRepository.save(user);
+            }
+        }
+        else{
+            throw new WrongDataException("No found such user");
+        }
     }
 }
