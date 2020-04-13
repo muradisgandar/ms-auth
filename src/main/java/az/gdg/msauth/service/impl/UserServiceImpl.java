@@ -64,9 +64,9 @@ public class UserServiceImpl implements UserService {
         MailDTO mail = new MailDTO().builder()
                 .mailTo(Collections.singletonList(userDTO.getEmail()))
                 .mailSubject("Your registration letter")
-                .mailBody("<h2>" + "Verify Account" + "</h2>" + "</br>"
-                + "https://ms-gdg-auth.herokuapp.com/user/verify?email=" + userDTO.getEmail()
-                + "&code=" + code)
+                .mailBody("<h2>" + "Verify Account" + "</h2>" + "</br>" +
+                        "https://ms-gdg-auth.herokuapp.com/user/verify?email=" + userDTO.getEmail() +
+                        "&code=" + code)
                 .build();
 
         emailService.sendToQueue(mail);
@@ -100,13 +100,12 @@ public class UserServiceImpl implements UserService {
 
         UserEntity user = userRepository.findByEmail(email);
 
-        if(user!=null){
-            if(!user.getStatus().equals(Status.CONFIRMED)){
+        if (user != null) {
+            if (!user.getStatus().equals(Status.CONFIRMED)) {
                 user.setStatus(Status.CONFIRMED);
                 userRepository.save(user);
             }
-        }
-        else{
+        } else {
             throw new WrongDataException("No found such user");
         }
     }

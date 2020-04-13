@@ -63,8 +63,8 @@ public class UserController {
     }
 
     @GetMapping(value = "/verify")
-    public void verifyAccount(@RequestParam("email") String email ,@RequestParam("code") String code ){
-            userService.verifyAccount(email, code);
+    public void verifyAccount(@RequestParam("email") String email, @RequestParam("code") String code) {
+        userService.verifyAccount(email, code);
 
     }
 
