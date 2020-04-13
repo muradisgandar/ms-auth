@@ -104,6 +104,8 @@ public class UserServiceImpl implements UserService {
             if (user.getVerifyCode().equals(code)) {
                 user.setStatus(Status.CONFIRMED);
                 userRepository.save(user);
+            } else {
+                throw new WrongDataException("Verification code is not valid!");
             }
         } else {
             throw new WrongDataException("No found such user");
