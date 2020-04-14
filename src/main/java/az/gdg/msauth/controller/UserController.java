@@ -68,4 +68,16 @@ public class UserController {
         return "Your account is verified, now you can log in";
     }
 
+    @GetMapping(value = "/forgot")
+    public void sendResetPasswordLinkToMail(@RequestParam("email") String email) {
+        userService.sendResetPasswordLinkToMail(email);
+    }
+
+    @GetMapping(value = "/reset")
+    public void resetPassword(@RequestParam("email") String email, @RequestParam("password") String password) {
+        userService.resetPassword(email, password);
+    }
+
+
+
 }

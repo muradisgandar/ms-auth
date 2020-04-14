@@ -12,7 +12,6 @@ import az.gdg.msauth.security.model.Role;
 import az.gdg.msauth.security.service.AuthenticationService;
 import az.gdg.msauth.service.EmailService;
 import az.gdg.msauth.service.UserService;
-import az.gdg.msauth.util.VerifyCodeGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -66,8 +65,11 @@ public class UserServiceImpl implements UserService {
                 .mailTo(Collections.singletonList(userDTO.getEmail()))
                 .mailSubject("Your registration letter")
                 .mailBody("<h2>" + "Verify Account" + "</h2>" + "</br>" +
+                        "<a href=" +
                         "https://ms-gdg-auth.herokuapp.com/user/verify?email=" + userDTO.getEmail() +
-                        "&code=" + code)
+                        "&code=" + code + ">" +
+                        "https://ms-gdg-auth.herokuapp.com/user/verify?email=" + userDTO.getEmail() +
+                        "&code=" + code + "</a>")
                 .build();
 
         emailService.sendToQueue(mail);
@@ -113,4 +115,39 @@ public class UserServiceImpl implements UserService {
             throw new WrongDataException("No found such user");
         }
     }
+
+    @Override
+    public void sendResetPasswordLinkToMail(String email) {
+        UserEntity user = userRepository.findByEmail(email);
+
+        if (user != null) {
+            MailDTO mail = new MailDTO().builder()
+                    .mailTo(Collections.singletonList(email))
+                    .mailSubject("Your reset password letter")
+                    .mailBody("<h2>" + "Verify Account" + "</h2>" + "</br>" +
+                            "https://localhost:8080/reset")
+                    .build();
+
+            emailService.sendToQueue(mail);
+        } else {
+            throw new WrongDataException("No such user found!");
+        }
+
+    }
+
+    @Override
+    public void resetPassword(String email, String password) {
+
+        UserEntity user = userRepository.findByEmail(email);
+
+        if (user != null) {
+            String newPassword = new BCryptPasswordEncoder().encode(password);
+            user.setPassword(newPassword);
+            userRepository.save(user);
+        } else {
+            throw new WrongDataException("No found such user!");
+        }
+
+    }
+
 }
