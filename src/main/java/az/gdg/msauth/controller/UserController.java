@@ -65,7 +65,7 @@ public class UserController {
     @GetMapping(value = "/verify")
     public String verifyAccount(@RequestParam("email") String email, @RequestParam("code") String code) {
         userService.verifyAccount(email, code);
-        return "Your account is verified!";
+        return "Your account is verified, now you can log in";
     }
 
 }

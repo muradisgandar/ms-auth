@@ -66,11 +66,8 @@ public class UserServiceImpl implements UserService {
                 .mailTo(Collections.singletonList(userDTO.getEmail()))
                 .mailSubject("Your registration letter")
                 .mailBody("<h2>" + "Verify Account" + "</h2>" + "</br>" +
-                        "<a href=" +
                         "https://ms-gdg-auth.herokuapp.com/user/verify?email=" + userDTO.getEmail() +
-                        "&code=" + code + ">" +
-                        "https://ms-gdg-auth.herokuapp.com/user/verify?email=" + userDTO.getEmail() +
-                        "&code=" + code + "</a>")
+                        "&code=" + code)
                 .build();
 
         emailService.sendToQueue(mail);
