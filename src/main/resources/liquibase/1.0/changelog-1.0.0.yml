@@ -30,7 +30,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: verify_code
+                  name: account_verification_code
                   type: varchar(255)
                   constraints:
                     nullable: false

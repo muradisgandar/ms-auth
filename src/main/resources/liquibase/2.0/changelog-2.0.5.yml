@@ -27,7 +27,7 @@ databaseChangeLog:
                   name: status
                   value: CONFIRMED
               - column:
-                  name: verify_code
+                  name: account_verification_code
                   value: acb8de52-f86b-42df-bf24-3ec125d272c8
               - column:
                   name: surname
