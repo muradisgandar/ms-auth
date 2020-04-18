@@ -48,14 +48,14 @@ public class UserController {
 
     @ApiOperation("get user info")
     @GetMapping("/info")
-    public UserInfo getCustomerInfo(@RequestHeader("X-Auth-Token") String token) {
+    public UserInfo getUserInfo(@RequestHeader("X-Auth-Token") String token) {
         logger.debug("Token validation start");
         return authenticationService.validateToken(token);
     }
 
     @ApiOperation("get userId by email")
     @GetMapping("/id/by/email/{email}")
-    public String getCustomerIdByEmail(
+    public String getUserIdByEmail(
             @RequestHeader("X-Auth-Token") String token,
             @PathVariable(name = "email") String email) {
         logger.debug("Get Customer's id by email");
