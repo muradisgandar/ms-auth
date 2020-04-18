@@ -61,7 +61,7 @@ class AuthenticationServiceImplTest extends Specification {
     def "don't throw WrongDataException in createAuthenticationToken() method if userEntity is found and return token"() {
         given:
             def request = new JwtAuthenticationRequest("12345", "asdfg@mail.ru")
-            def entity = new UserEntity(1, null, null, null, null, null, "ROLE_USER" as Role, "CONFIRMED" as Status, null,null)
+            def entity = new UserEntity(1, null, null, null, null, null,null, "ROLE_USER" as Role, "CONFIRMED" as Status, null,null)
             def token = "asdfghjklyutryrwrtututu"
             1 * userRepository.findByEmail(request.getEmail()) >> entity
 
@@ -78,7 +78,7 @@ class AuthenticationServiceImplTest extends Specification {
     def "don't throw WrongDataException in createAuthenticationToken() method if status is CONFIRMED and return token"() {
         given:
             def request = new JwtAuthenticationRequest("12345", "asdfg@mail.ru")
-            def entity = new UserEntity(1, null, null, null, null, null, "ROLE_USER" as Role, "CONFIRMED" as Status, null,null)
+            def entity = new UserEntity(1, null, null, null, null, null,null, "ROLE_USER" as Role, "CONFIRMED" as Status, null,null)
             def token = "asdfghjklyutryrwrtututu"
             2 * userRepository.findByEmail(request.getEmail()) >> entity
             userRepository.findByEmail(request.getEmail()).getStatus().toString().equals("CONFIRMED") >> true
@@ -96,7 +96,7 @@ class AuthenticationServiceImplTest extends Specification {
     def "throw WrongDataException in createAuthenticationToken() method if status is not CONFIRMED"() {
         given:
             def request = new JwtAuthenticationRequest("12345", "asdfg@mail.ru")
-            def entity = new UserEntity(1, null, null, null, null, null, "ROLE_USER" as Role, "REGISTERED" as Status, null,null)
+            def entity = new UserEntity(1, null, null, null, null, null,null, "ROLE_USER" as Role, "REGISTERED" as Status, null,null)
             2 * userRepository.findByEmail(request.getEmail()) >> entity
             userRepository.findByEmail(request.getEmail()).getStatus().toString().equals("CONFIRMED") >> false
 

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,6 +62,29 @@ public class UserController {
         return userService.getCustomerIdByEmail(token, email);
     }
 
+    @ApiOperation("verify account when user registers")
+    @GetMapping(value = "/verify-account")
+    public String verifyAccount(@RequestParam("email") String email, @RequestParam("code") String code) {
+        logger.debug("VerifyAccount start");
+        userService.verifyAccount(email, code);
+        logger.debug("VerifyAccount end");
+        return "Your account is verified, now you can log in";
+    }
 
+    @ApiOperation("send reset password link to mail")
+    @PostMapping(value = "/forgot-password")
+    public void sendResetPasswordLinkToMail(@RequestParam("email") String email) {
+        logger.debug("SendResetPasswordLinkToMail start");
+        userService.sendResetPasswordLinkToMail(email);
+        logger.debug("SendResetPasswordLinkToMail stop");
+    }
+
+    @ApiOperation("reset password")
+    @PostMapping(value = "/reset-password")
+    public void resetPassword(@RequestParam("token") String token, @RequestParam("password") String password) {
+        logger.debug("ResetPassword start");
+        userService.resetPassword(token, password);
+        logger.debug("ResetPassword stop");
+    }
 
 }
