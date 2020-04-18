@@ -7,6 +7,7 @@ import az.gdg.msauth.model.entity.UserEntity
 import az.gdg.msauth.security.exception.AuthenticationException
 import az.gdg.msauth.security.model.dto.UserInfo
 import az.gdg.msauth.security.service.impl.AuthenticationServiceImpl
+import az.gdg.msauth.security.util.TokenUtil
 import az.gdg.msauth.service.impl.EmailServiceImpl
 import az.gdg.msauth.service.impl.UserServiceImpl
 import spock.lang.Ignore
@@ -18,14 +19,16 @@ class UserServiceImplTest extends Specification {
 
     UserRepository userRepository
     AuthenticationServiceImpl authenticationServiceImpl
-    EmailServiceImpl emailServiceImpl;
     UserServiceImpl userService
+    EmailServiceImpl emailServiceImpl
+    TokenUtil tokenUtil
 
     def setup() {
         userRepository = Mock()
         authenticationServiceImpl = Mock()
         emailServiceImpl = Mock()
-        userService = new UserServiceImpl(userRepository, authenticationServiceImpl,emailServiceImpl)
+        tokenUtil = Mock()
+        userService = new UserServiceImpl(userRepository, authenticationServiceImpl,emailServiceImpl,tokenUtil)
     }
 
     def "doesn't throw exception in signUp() method if email doesn't exist in database"() {
@@ -79,7 +82,7 @@ class UserServiceImplTest extends Specification {
     def "don't throw exception in getCustomerIdByEmail() method if user's role is  admin"() {
         given:
             def userInfo = new UserInfo("asdfghjkl", "ROLE_ADMIN","CONFIRMED","1", "admin@mail.ru")
-            def entity = new UserEntity(1, null, null, null, null, null, null, null, null,null)
+            def entity = new UserEntity(1, null, null, null, null, null,null, null, null, null,null)
             def token = "asdfghjkl"
             def email = "admin@mail.ru"
 
@@ -97,7 +100,7 @@ class UserServiceImplTest extends Specification {
     def "don't throw exception in getCustomerIdByEmail() method if email is found and return user's id"() {
         given:
             def userInfo = new UserInfo("admin@mail.ru", "ROLE_ADMIN","CONFIRMED","1","asdfghjkl" )
-            def entity = new UserEntity(1, null, null, null, null, null, null, null, null,null)
+            def entity = new UserEntity(1, null, null, null,null, null, null, null, null, null,null)
             def token = "asdfghjkl"
             def email = "admin@mail.ru"
 

@@ -1,3 +1,35 @@
+server:
+  port: 8080
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
 spring:
-  profiles:
-    active: "prod"
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    platform: mysql
+    url: jdbc:mysql://localhost:3306/msauthlocal?createDatabaseIfNotExist=true
+    username: root
+    password: root12345
+  rabbitmq:
+    addresses: xxx
+  cloud:
+    stream:
+      bindings:
+        output:
+          destination: mail
+          group: mail-gorup
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    change-log: classpath:liquibase/changelog-master.yml
+jwt:
+  secret: ${SECRET_KEY}
+  expiration: 9000
+  header: X-Auth-Token
+swagger:
+  enabled: true
+
