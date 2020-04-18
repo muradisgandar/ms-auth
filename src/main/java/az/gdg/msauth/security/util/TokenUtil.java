@@ -46,6 +46,13 @@ public class TokenUtil {
                 .build();
     }
 
+    public String getEmailFromResetPasswordToken(String token) {
+        logger.info("UtilLog.GetEmailFromResetPasswordToken.Start");
+        String email = getAllClaimsFromToken(token).get("email").toString();
+        logger.info("UtilLog.GetEmailFromResetPasswordToken.Stop.Success");
+        return email;
+    }
+
     private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         logger.info("UtilLog.GetClaimFromToken.Start");
         Claims claims = getAllClaimsFromToken(token);
@@ -81,6 +88,27 @@ public class TokenUtil {
                 .setClaims(claims)
                 .setSubject(subject)//username
                 .setId(userId)
+                .setIssuedAt(createdDate)
+                .setExpiration(expirationDate)
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
+    }
+
+    public String generateTokenForResetPasswordURL(String email) {
+        logger.info("UtilLog.generateTokenForResetPasswordURL.Start");
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("email", email);
+        logger.info("UtilLog.generateTokenForResetPasswordURL.Stop.Success");
+        return doGenerateTokenForResetPasswordURL(claims);
+    }
+
+    public String doGenerateTokenForResetPasswordURL(Map<String, Object> claims) {
+        logger.info("UtilLog.doGenerateTokenForResetPasswordURL.Start");
+        Date createdDate = clock.now();
+        Date expirationDate = calculateExpirationDate(createdDate);
+        logger.info("UtilLog.doGenerateTokenForResetPasswordURL.Stop.Success");
+        return Jwts.builder()
+                .setClaims(claims)
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS512, secret)

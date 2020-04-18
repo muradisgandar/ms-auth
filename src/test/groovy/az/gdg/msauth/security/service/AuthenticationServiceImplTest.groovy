@@ -31,7 +31,6 @@ class AuthenticationServiceImplTest extends Specification {
         authenticationServiceImp = new AuthenticationServiceImpl(tokenUtil, userRepository, authenticationManager)
     }
 
-    @Ignore
     def "return userinfo in validateToken() method if token is valid"() {
         given:
             def userInfo = new UserInfo("admin@mail.ru", "ROLE_USER","RECIEVED","1","asdfghjkl" )
@@ -46,7 +45,6 @@ class AuthenticationServiceImplTest extends Specification {
 
     }
 
-    @Ignore
     def "don't return userinfo in validateToken() method if token is invalid"() {
         given:
             String token = "asdfghjkl"
@@ -60,11 +58,10 @@ class AuthenticationServiceImplTest extends Specification {
 
     }
 
-    @Ignore
     def "don't throw WrongDataException in createAuthenticationToken() method if userEntity is found and return token"() {
         given:
             def request = new JwtAuthenticationRequest("12345", "asdfg@mail.ru")
-            def entity = new UserEntity(1, null, null, null, null, null, "ROLE_USER" as Role, "CONFIRMED" as Status, null,null)
+            def entity = new UserEntity(1, null, null, null, null, null,null, "ROLE_USER" as Role, "CONFIRMED" as Status, null,null)
             def token = "asdfghjklyutryrwrtututu"
             1 * userRepository.findByEmail(request.getEmail()) >> entity
 
@@ -78,11 +75,10 @@ class AuthenticationServiceImplTest extends Specification {
 
     }
 
-    @Ignore
     def "don't throw WrongDataException in createAuthenticationToken() method if status is CONFIRMED and return token"() {
         given:
             def request = new JwtAuthenticationRequest("12345", "asdfg@mail.ru")
-            def entity = new UserEntity(1, null, null, null, null, null, "ROLE_USER" as Role, "CONFIRMED" as Status, null,null)
+            def entity = new UserEntity(1, null, null, null, null, null,null, "ROLE_USER" as Role, "CONFIRMED" as Status, null,null)
             def token = "asdfghjklyutryrwrtututu"
             2 * userRepository.findByEmail(request.getEmail()) >> entity
             userRepository.findByEmail(request.getEmail()).getStatus().toString().equals("CONFIRMED") >> true
@@ -97,11 +93,10 @@ class AuthenticationServiceImplTest extends Specification {
 
     }
 
-    @Ignore
     def "throw WrongDataException in createAuthenticationToken() method if status is not CONFIRMED"() {
         given:
             def request = new JwtAuthenticationRequest("12345", "asdfg@mail.ru")
-            def entity = new UserEntity(1, null, null, null, null, null, "ROLE_USER" as Role, "REGISTERED" as Status, null,null)
+            def entity = new UserEntity(1, null, null, null, null, null,null, "ROLE_USER" as Role, "REGISTERED" as Status, null,null)
             2 * userRepository.findByEmail(request.getEmail()) >> entity
             userRepository.findByEmail(request.getEmail()).getStatus().toString().equals("CONFIRMED") >> false
 
@@ -114,7 +109,6 @@ class AuthenticationServiceImplTest extends Specification {
 
     }
 
-    @Ignore
     def "throw WrongDataException in createAuthenticationToken() method if userEntity is not found"() {
         given:
             def request = new JwtAuthenticationRequest("12345", "asdfg@mail.ru")
@@ -129,7 +123,6 @@ class AuthenticationServiceImplTest extends Specification {
 
     }
 
-    @Ignore
     def "throw exception in authenticate() method if username is null"() {
         given:
             def username = null
@@ -143,7 +136,6 @@ class AuthenticationServiceImplTest extends Specification {
 
     }
 
-    @Ignore
     def "throw exception in authenticate() method if password is null"() {
         given:
             def username = "example@mail.ru"
@@ -158,7 +150,6 @@ class AuthenticationServiceImplTest extends Specification {
 
     }
 
-    @Ignore
     def "don't throw exception in authenticate() method if password and username are not null"() {
         given:
             def username = "example@mail.ru"

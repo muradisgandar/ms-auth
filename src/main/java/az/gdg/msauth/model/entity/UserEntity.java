@@ -49,8 +49,8 @@ public class UserEntity {
     @Column(name = "surname")
     private String surname;
 
-    @Column(name = "verify_code")
-    private String verifyCode;
+    @Column(name = "account_verification_code")
+    private String accountVerificationCode;
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)

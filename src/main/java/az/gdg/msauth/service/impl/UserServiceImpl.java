@@ -10,6 +10,7 @@ import az.gdg.msauth.security.model.dto.UserInfo;
 import az.gdg.msauth.security.exception.AuthenticationException;
 import az.gdg.msauth.security.model.Role;
 import az.gdg.msauth.security.service.AuthenticationService;
+import az.gdg.msauth.security.util.TokenUtil;
 import az.gdg.msauth.service.EmailService;
 import az.gdg.msauth.service.UserService;
 import org.slf4j.Logger;
@@ -25,15 +26,17 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final TokenUtil tokenUtil;
     private final AuthenticationService authenticationService;
     private final EmailService emailService;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     public UserServiceImpl(UserRepository userRepository, AuthenticationService authenticationService,
-                           EmailService emailService) {
+                           EmailService emailService, TokenUtil tokenUtil) {
         this.userRepository = userRepository;
         this.authenticationService = authenticationService;
         this.emailService = emailService;
+        this.tokenUtil = tokenUtil;
     }
 
     public void signUp(UserDTO userDTO) {
@@ -54,7 +57,7 @@ public class UserServiceImpl implements UserService {
                 .username(userDTO.getEmail())
                 .email(userDTO.getEmail())
                 .password(password)
-                .verifyCode(code)
+                .accountVerificationCode(code)
                 .role(Role.ROLE_USER)
                 .status(Status.REGISTERED)
                 .build();
@@ -66,14 +69,13 @@ public class UserServiceImpl implements UserService {
                 .mailSubject("Your registration letter")
                 .mailBody("<h2>" + "Verify Account" + "</h2>" + "</br>" +
                         "<a href=" +
-                        "https://ms-gdg-auth.herokuapp.com/user/verify?email=" + userDTO.getEmail() +
+                        "https://ms-gdg-auth.herokuapp.com/user/verify-account?email=" + userDTO.getEmail() +
                         "&code=" + code + ">" +
-                        "https://ms-gdg-auth.herokuapp.com/user/verify?email=" + userDTO.getEmail() +
+                        "https://ms-gdg-auth.herokuapp.com/user/verify-account?email=" + userDTO.getEmail() +
                         "&code=" + code + "</a>")
                 .build();
 
         emailService.sendToQueue(mail);
-
         logger.info("ActionLog.Sign up user.Stop.Success");
 
     }
@@ -100,43 +102,58 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void verifyAccount(String email, String code) {
-
+        logger.info("ActionLog.VerifyAccount.Start : email {}", email);
         UserEntity user = userRepository.findByEmail(email);
 
         if (user != null) {
-            if (user.getVerifyCode().equals(code)) {
+            if (user.getAccountVerificationCode().equals(code)) {
                 user.setStatus(Status.CONFIRMED);
-                user.setVerifyCode(UUID.randomUUID().toString());
+                user.setAccountVerificationCode(UUID.randomUUID().toString());
                 userRepository.save(user);
             } else {
+                logger.error("ActionLog.WrongDataException.Thrown");
                 throw new WrongDataException("Verification code is not valid!");
             }
         } else {
+            logger.error("ActionLog.WrongDataException.Thrown");
             throw new WrongDataException("No found such user");
         }
+
+        logger.info("ActionLog.VerifyAccount.Stop.Success");
+
     }
 
     @Override
     public void sendResetPasswordLinkToMail(String email) {
+        logger.info("ActionLog.SendResetPasswordLinkToMail.Start : email {}", email);
         UserEntity user = userRepository.findByEmail(email);
 
         if (user != null) {
+
+            String token = tokenUtil.generateTokenForResetPasswordURL(email);
             MailDTO mail = new MailDTO().builder()
                     .mailTo(Collections.singletonList(email))
                     .mailSubject("Your reset password letter")
-                    .mailBody("<h2>" + "Verify Account" + "</h2>" + "</br>" +
-                            "https://localhost:8080/reset")
+                    .mailBody("<h2>" + "Reset Password" + "</h2>" + "</br>" +
+                            "<a href=" +
+                            "http://localhost:5500/reset.html?token=" + token + ">" +
+                            "http://localhost:5500/reset.html?token=" + token + "</a>")
                     .build();
 
             emailService.sendToQueue(mail);
         } else {
+            logger.error("ActionLog.WrongDataException.Thrown");
             throw new WrongDataException("No such user found!");
         }
+
+        logger.info("ActionLog.SendResetPasswordLinkToMail.Stop.Success");
 
     }
 
     @Override
-    public void resetPassword(String email, String password) {
+    public void resetPassword(String token, String password) {
+        logger.info("ActionLog.ResetPassword.Start");
+        String email = tokenUtil.getEmailFromResetPasswordToken(token);
 
         UserEntity user = userRepository.findByEmail(email);
 
@@ -145,9 +162,11 @@ public class UserServiceImpl implements UserService {
             user.setPassword(newPassword);
             userRepository.save(user);
         } else {
+            logger.info("ActionLog.WrongDataException.Thrown");
             throw new WrongDataException("No found such user!");
         }
 
-    }
+        logger.info("ActionLog.ResetPassword.Stop.Success");
 
+    }
 }
