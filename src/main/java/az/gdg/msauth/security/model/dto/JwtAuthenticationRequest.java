@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JwtAuthenticationRequest {
-    private String email;
+    private String mail;
 
     private String password;
 

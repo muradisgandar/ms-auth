@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - logicalFilePath: liquibase/3.0/changelog-3.0.6.yml
+  - changeSet:
+      id: add imageUrl column
+      author: Murad Isgandarli
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: image_url
+                  type: varchar(255)

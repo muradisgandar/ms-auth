@@ -20,33 +20,33 @@ public class UserValidator implements
 
     @Override
     public boolean isValid(UserDTO value, ConstraintValidatorContext context) {
-        return isNameValid(value.getName(),context) &&
-                isSurnameValid(value.getSurname(),context) &&
-                isEmailValid(value.getEmail(),context) &&
-                isPasswordValid(value.getPassword(),context);
+        return isFirstNameValid(value.getFirstName(), context) &&
+                isLastNameValid(value.getLastName(), context) &&
+                isMailValid(value.getMail(), context) &&
+                isPasswordValid(value.getPassword(), context);
     }
 
-    private boolean isNameValid(String name, ConstraintValidatorContext context) {
-        if (name == null || name.isEmpty() || !name.matches("[A-Z][a-z]*")) {
-            violationHelper.addViolation(context,"name","Name is not valid");
+    private boolean isFirstNameValid(String firstName, ConstraintValidatorContext context) {
+        if (firstName == null || firstName.isEmpty() || !firstName.matches("[A-Z][a-z]*")) {
+            violationHelper.addViolation(context, "firstName", "FirstName is not valid");
             return false;
         }
         return true;
     }
 
-    private boolean isSurnameValid(String surname, ConstraintValidatorContext context) {
-        if (surname == null || surname.isEmpty() || !surname.matches("[A-Z][a-z]*")) {
-            violationHelper.addViolation(context,"surname","Surname is not valid");
+    private boolean isLastNameValid(String lastName, ConstraintValidatorContext context) {
+        if (lastName == null || lastName.isEmpty() || !lastName.matches("[A-Z][a-z]*")) {
+            violationHelper.addViolation(context, "lastName", "LastName is not valid");
             return false;
         }
         return true;
     }
 
-    private boolean isEmailValid(String email, ConstraintValidatorContext context) {
-        if (email == null ||
-                email.isEmpty() ||
-                !email.matches("^([a-zA-Z0-9_\\\\.-]+)@([a-zA-Z0-9-]+).([a-z]{2,8})(.[a-z]{2,8})?$")) {
-            violationHelper.addViolation(context,"email","Email is not valid");
+    private boolean isMailValid(String mail, ConstraintValidatorContext context) {
+        if (mail == null ||
+                mail.isEmpty() ||
+                !mail.matches("^([a-zA-Z0-9_\\\\.-]+)@([a-zA-Z0-9-]+).([a-z]{2,8})(.[a-z]{2,8})?$")) {
+            violationHelper.addViolation(context, "mail", "Mail is not valid");
             return false;
         }
         return true;
@@ -55,8 +55,9 @@ public class UserValidator implements
     private boolean isPasswordValid(String password, ConstraintValidatorContext context) {
         if (password == null ||
                 password.isEmpty() ||
-                !password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[.@#$%^&+=])(?=\\S+$).{8,}$")) {
-            violationHelper.addViolation(context,"password","Password is not valid");
+                !password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[./_`~|{}?:;!(),><*@#$%^&+='])" +
+                        "(?=\\S+$).{8,}$")) {
+            violationHelper.addViolation(context, "password", "Password is not valid");
             return false;
         }
         return true;

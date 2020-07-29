@@ -1,8 +1,8 @@
 package az.gdg.msauth.security.service.impl;
 
 import az.gdg.msauth.dao.UserRepository;
-import az.gdg.msauth.model.entity.UserEntity;
 import az.gdg.msauth.exception.WrongDataException;
+import az.gdg.msauth.model.entity.UserEntity;
 import az.gdg.msauth.security.bean.CustomUserDetail;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,18 +23,18 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserEntity user = repository.findByEmail(username);
+        UserEntity user = repository.findByMail(username);
         if (user != null) {
             return buildSecurityUser(user);
         } else {
-            throw new WrongDataException("No such email is registered");
+            throw new WrongDataException("Incorrect login credentials!");
         }
 
     }
 
     private CustomUserDetail buildSecurityUser(UserEntity user) {
         return CustomUserDetail.builder()
-                .username(user.getEmail())
+                .username(user.getMail())
                 .password(user.getPassword())
                 .authorities(Collections.singletonList(user.getRole()))
                 .accountNonExpired(true)

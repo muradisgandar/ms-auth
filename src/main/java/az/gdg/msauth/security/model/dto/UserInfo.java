@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserInfo {
-    private String token;
     private String role;
     private String status;
     private String userId;
-    private String email;
+    private String mail;
 }

@@ -1,0 +1,86 @@
+databaseChangeLog:
+  - logicalFilePath: liquibase/3.0/changelog-3.0.4.yml
+  - changeSet:
+      id: update users
+      author: Murad Isgandarli
+      changes:
+        - update:
+            tableName: users
+            where: mail="isgandarli_murad@mail.ru"
+            columns:
+              - column:
+                  name: remaining_quack_count
+                  value: 500
+              - column:
+                  name: remaining_hate_count
+                  value: 500
+        - update:
+            tableName: users
+            where: mail="movsum.nigar@gmail.com"
+            columns:
+              - column:
+                  name: remaining_quack_count
+                  value: 500
+              - column:
+                  name: remaining_hate_count
+                  value: 500
+        - update:
+            tableName: users
+            where: mail="minaya.yagubova@gmail.com"
+            columns:
+              - column:
+                  name: remaining_quack_count
+                  value: 500
+              - column:
+                  name: remaining_hate_count
+                  value: 500
+        - update:
+            tableName: users
+            where: mail="asif.hajiyev@outlook.com"
+            columns:
+              - column:
+                  name: remaining_quack_count
+                  value: 500
+              - column:
+                  name: remaining_hate_count
+                  value: 500
+        - update:
+            tableName: users
+            where: mail="huseynov_ali@outlook.com"
+            columns:
+              - column:
+                  name: remaining_quack_count
+                  value: 500
+              - column:
+                  name: remaining_hate_count
+                  value: 500
+        - update:
+            tableName: users
+            where: mail="rahimov.mahammad.s@gmail.com"
+            columns:
+              - column:
+                  name: remaining_quack_count
+                  value: 500
+              - column:
+                  name: remaining_hate_count
+                  value: 500
+        - update:
+            tableName: users
+            where: mail="lamanguliyeva@outlook.com"
+            columns:
+              - column:
+                  name: remaining_quack_count
+                  value: 500
+              - column:
+                  name: remaining_hate_count
+                  value: 500
+        - update:
+            tableName: users
+            where: mail="muradisgenderli441@gmail.com"
+            columns:
+              - column:
+                  name: remaining_quack_count
+                  value: 500
+              - column:
+                  name: remaining_hate_count
+                  value: 500

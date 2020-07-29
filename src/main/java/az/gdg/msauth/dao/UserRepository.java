@@ -4,9 +4,15 @@ import az.gdg.msauth.model.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface UserRepository extends JpaRepository<UserEntity,Integer> {
+import java.util.List;
 
-    UserEntity findByEmail(String email);
+@Repository
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+
+    UserEntity findByMail(String mail);
+
+    List<UserEntity> findFirst3ByOrderByPopularityDesc();
+
+    List<UserEntity> findByIdIn(List<Integer> userIds);
 }
 

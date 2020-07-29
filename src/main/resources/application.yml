@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 logging:
   level:
     org:
@@ -9,7 +9,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     platform: mysql
-    url: jdbc:mysql://localhost:3306/msauthlocal?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/msauth?createDatabaseIfNotExist=true
     username: root
     password: root12345
   rabbitmq:
@@ -19,7 +19,7 @@ spring:
       bindings:
         output:
           destination: mail
-          group: mail-gorup
+          group: mail-group
   jpa:
     database: mysql
     hibernate:
@@ -32,4 +32,7 @@ jwt:
   header: X-Auth-Token
 swagger:
   enabled: true
+service:
+  url:
+    ms-storage: ${SERVICE_URL_MS-STORAGE}
 

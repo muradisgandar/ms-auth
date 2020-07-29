@@ -15,7 +15,7 @@ databaseChangeLog:
                   name:  email
                   value: rahimov.mahammad.s@gmail.com
               - column:
-                  name: name
+                  name: first_name
                   value: Mahammad
               - column:
                   name: password
@@ -27,10 +27,10 @@ databaseChangeLog:
                   name: status
                   value: CONFIRMED
               - column:
-                  name: account_verification_code
-                  value: acb8de52-f86b-42df-bf24-3ec125d272c8
+                  name: popularity
+                  value: 0
               - column:
-                  name: surname
+                  name: last_name
                   value: Rahimov
               - column:
                   name: username
