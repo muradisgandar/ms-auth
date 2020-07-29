@@ -20,17 +20,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: name
+                  name: first_name
                   type: varchar(255)
                   constraints:
                     nullable: false
               - column:
                   name: password
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: account_verification_code
                   type: varchar(255)
                   constraints:
                     nullable: false
@@ -45,8 +40,13 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: surname
+                  name: last_name
                   type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: popularity
+                  type: int
                   constraints:
                     nullable: false
               - column:

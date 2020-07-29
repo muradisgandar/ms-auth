@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - logicalFilePath: liquibase/3.0/changelog-3.0.2.yml
+  - changeSet:
+      id: rename column name email to mail
+      author: Murad Isgandarli
+      changes:
+        - renameColumn:
+            tableName: users
+            newColumnName: mail
+            oldColumnName: email
+            columnDataType: varchar(255)
+
+        - addNotNullConstraint:
+            tableName: users
+            columnName: mail
+            columnDataType: varchar(255)
+

@@ -6,9 +6,9 @@ import az.gdg.msauth.security.model.dto.UserInfo;
 
 public interface AuthenticationService {
 
-    public JwtAuthenticationResponse createAuthenticationToken(JwtAuthenticationRequest request);
+    JwtAuthenticationResponse createAuthenticationToken(JwtAuthenticationRequest request);
 
-    public void authenticate(String username, String password);
+    void authenticate(String username, String password);
 
-    public UserInfo validateToken(String token);
+    UserInfo validateToken(String token);
 }

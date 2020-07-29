@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - logicalFilePath: liquibase/3.0/changelog-3.0.3.yml
+  - changeSet:
+      id: add remaining_quack_count and remaining_hate_count column
+      author: Murad Isgandarli
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: remaining_quack_count
+                  type: int
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: remaining_hate_count
+                  type: int
+                  constraints:
+                    nullable: false

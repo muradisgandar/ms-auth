@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - logicalFilePath: liquibase/3.0/changelog-3.0.1.yml
+  - changeSet:
+      id: update users
+      author: Murad Isgandarli
+      changes:
+        - update:
+            tableName: users
+            where: email="isgandarli_murad@mail.ru"
+            columns:
+              - column:
+                  name: terms_and_conditions
+                  value: 1
+        - update:
+            tableName: users
+            where: email="movsum.nigar@gmail.com"
+            columns:
+              - column:
+                  name: terms_and_conditions
+                  value: 1
+        - update:
+            tableName: users
+            where: email="minaya.yagubova@gmail.com"
+            columns:
+              - column:
+                  name: terms_and_conditions
+                  value: 1
+        - update:
+            tableName: users
+            where: email="asif.hajiyev@outlook.com"
+            columns:
+              - column:
+                  name: terms_and_conditions
+                  value: 1
+        - update:
+            tableName: users
+            where: email="huseynov_ali@outlook.com"
+            columns:
+              - column:
+                  name: terms_and_conditions
+                  value: 1
+        - update:
+            tableName: users
+            where: email="rahimov.mahammad.s@gmail.com"
+            columns:
+              - column:
+                  name: terms_and_conditions
+                  value: 1
+        - update:
+            tableName: users
+            where: email="lamanguliyeva@outlook.com"
+            columns:
+              - column:
+                  name: terms_and_conditions
+                  value: 1
+        - update:
+            tableName: users
+            where: email="muradisgenderli441@gmail.com"
+            columns:
+              - column:
+                  name: terms_and_conditions
+                  value: 1

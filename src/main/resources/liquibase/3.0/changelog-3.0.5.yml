@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - logicalFilePath: liquibase/3.0/changelog-3.0.5.yml
+  - changeSet:
+      id: drop terms_and_conditions column
+      author: Murad Isgandarli
+      changes:
+        - dropColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: terms_and_conditions

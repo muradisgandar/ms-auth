@@ -19,7 +19,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -31,7 +31,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "username")
     private String username;
@@ -40,17 +40,17 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email")
-    private String email;
+    @Column(name = "mail")
+    private String mail;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "image_url")
+    private String imageUrl;
 
-    @Column(name = "surname")
-    private String surname;
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column(name = "account_verification_code")
-    private String accountVerificationCode;
+    @Column(name = "last_name")
+    private String lastName;
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
@@ -60,15 +60,24 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(name = "popularity")
+    private Integer popularity;
+
+    @Column(name = "remaining_quack_count")
+    private Integer remainingQuackCount;
+
+    @Column(name = "remaining_hate_count")
+    private Integer remainingHateCount;
+
     @Column(name = "created_at")
     @CreationTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     @UpdateTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
 }
 

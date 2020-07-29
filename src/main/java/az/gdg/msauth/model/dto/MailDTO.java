@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MailDTO {
 
-    private List<String> mailTo;
-    private String mailSubject;
-    private String mailBody;
+    private List<String> to;
+    private String subject;
+    private String body;
 }

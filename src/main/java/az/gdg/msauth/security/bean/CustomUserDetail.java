@@ -18,7 +18,7 @@ import java.util.List;
 public class CustomUserDetail implements UserDetails {
     private String username;
 
-    private String email;
+    private String mail;
 
     private String password;
 

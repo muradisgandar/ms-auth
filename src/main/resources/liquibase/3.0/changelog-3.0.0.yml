@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - logicalFilePath: liquibase/3.0/changelog-3.0.0.yml
+  - changeSet:
+      id: add terms_and_conditions column
+      author: Murad Isgandarli
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: terms_and_conditions
+                  type: tinyint(1)
+                  constraints:
+                    nullable: false

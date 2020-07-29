@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "Authentication Controller")
 public class AuthenticationController {
 
-    private final AuthenticationService service;
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
+    private final AuthenticationService service;
 
     public AuthenticationController(AuthenticationService service) {
         this.service = service;
@@ -34,7 +34,7 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/sign-in")
     public JwtAuthenticationResponse signIn(@RequestBody JwtAuthenticationRequest request) {
-        logger.debug("Sign in start");
+        logger.debug("signIn start : mail {}", request.getMail());
         return service.createAuthenticationToken(request);
     }
 
@@ -42,7 +42,7 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/validate")
     public UserInfo validateToken(@RequestHeader("X-Auth-Token") String token) {
-        logger.debug("Validate Token start");
+        logger.debug("validateToken start");
         return service.validateToken(token);
     }
 

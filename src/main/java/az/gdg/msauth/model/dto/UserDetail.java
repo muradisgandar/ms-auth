@@ -1,21 +1,19 @@
 package az.gdg.msauth.model.dto;
 
-import az.gdg.msauth.validation.user.UserConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@UserConstraint
-public class UserDTO {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserDetail {
 
-    private String mail;
+    private Long id;
     private String firstName;
     private String lastName;
-    private String password;
-    private Boolean areTermsAndConditionsConfirmed;
+    private String imageUrl;
+
 }
