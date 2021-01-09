@@ -12,7 +12,7 @@ databaseChangeLog:
                   name: updated_at
                   value: now()
               - column:
-                  name:  email
+                  name: email
                   value: muradisgenderli441@gmail.com
               - column:
                   name: first_name

@@ -5,9 +5,9 @@ databaseChangeLog:
       author: Murad Isgandarli
       changes:
         - modifyDataType:
-            columnName:  id
-            newDataType:  bigint
-            tableName:  users
+            columnName: id
+            newDataType: bigint
+            tableName: users
 
         - addAutoIncrement:
             columnDataType: bigint

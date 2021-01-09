@@ -46,4 +46,13 @@ public class AuthenticationController {
         return service.validateToken(token);
     }
 
+    @ApiOperation("refresh token")
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/refresh")
+    public JwtAuthenticationResponse refresh(@RequestHeader("X-Auth-Token") String token) {
+        logger.debug("refresh start");
+        return service.refreshToken(token);
+    }
+
+
 }

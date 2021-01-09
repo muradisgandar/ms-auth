@@ -34,129 +34,129 @@ class AuthenticationServiceImplTest extends Specification {
 
     def "return userInfo if token is valid"() {
         given:
-            def userInfo = new UserInfo()
-            userInfo.setUserId("1")
-            userInfo.setRole("ROLE_USER")
-            userInfo.setMail("admin@mail.ru")
-            userInfo.setStatus("CONFIRMED")
-            String token = "asdfghjkl"
+        def userInfo = new UserInfo()
+        userInfo.setUserId("1")
+        userInfo.setRole("ROLE_USER")
+        userInfo.setMail("admin@mail.ru")
+        userInfo.setStatus("CONFIRMED")
+        String token = "asdfghjkl"
 
         when:
-            authenticationServiceImp.validateToken(token)
+        authenticationServiceImp.validateToken(token)
 
         then:
-            1 * tokenUtil.isTokenValid(token) >> true
-            tokenUtil.getUserInfoFromToken(token) >> userInfo
+        1 * tokenUtil.isTokenValid(token) >> true
+        tokenUtil.getUserInfoFromToken(token) >> userInfo
 
     }
 
     def "don't return userInfo if token is invalid"() {
         given:
-            String token = "asdfghjkl"
+        String token = "asdfghjkl"
 
         when:
-            authenticationServiceImp.validateToken(token)
+        authenticationServiceImp.validateToken(token)
 
         then:
-            1 * tokenUtil.isTokenValid(token) >> false
-            tokenUtil.getUserInfoFromToken(token) >> null
+        1 * tokenUtil.isTokenValid(token) >> false
+        tokenUtil.getUserInfoFromToken(token) >> null
 
     }
 
     def "don't throw AuthenticationException and generate token if status is CONFIRMED"() {
         given:
-            def request = new JwtAuthenticationRequest()
-            request.setMail("example.com")
-            request.setPassword("1234")
-            def entity = new UserEntity()
-            entity.setId(1)
-            entity.setStatus(Status.CONFIRMED)
-            entity.setRole(Role.ROLE_USER)
-            def token = "asdfghjklyutryrwrtututu"
+        def request = new JwtAuthenticationRequest()
+        request.setMail("example.com")
+        request.setPassword("1234")
+        def entity = new UserEntity()
+        entity.setId(1)
+        entity.setStatus(Status.CONFIRMED)
+        entity.setRole(Role.ROLE_USER)
+        def token = "asdfghjklyutryrwrtututu"
 
         when:
-            authenticationServiceImp.createAuthenticationToken(request)
+        authenticationServiceImp.createAuthenticationToken(request)
 
         then:
-            1 * userRepository.findByMail(request.getMail()) >> entity
-            new JwtAuthenticationResponse(token) >> token
-            notThrown(AuthenticationException)
+        1 * userRepository.findByMail(request.getMail()) >> entity
+        new JwtAuthenticationResponse(token) >> token
+        notThrown(AuthenticationException)
 
     }
 
     def "should throw AuthenticationException if status is REGISTERED"() {
         given:
-            def request = new JwtAuthenticationRequest()
-            request.setMail("example.com")
-            request.setPassword("1234")
-            def entity = new UserEntity()
-            entity.setStatus(Status.REGISTERED)
+        def request = new JwtAuthenticationRequest()
+        request.setMail("example.com")
+        request.setPassword("1234")
+        def entity = new UserEntity()
+        entity.setStatus(Status.REGISTERED)
 
         when:
-            authenticationServiceImp.createAuthenticationToken(request)
+        authenticationServiceImp.createAuthenticationToken(request)
 
         then:
-            1 * userRepository.findByMail(request.getMail()) >> entity
-            thrown(AuthenticationException)
+        1 * userRepository.findByMail(request.getMail()) >> entity
+        thrown(AuthenticationException)
 
     }
 
     def "should throw AuthenticationException if status is BLOCKED"() {
         given:
-            def request = new JwtAuthenticationRequest()
-            request.setMail("example.com")
-            request.setPassword("1234")
-            def entity = new UserEntity()
-            entity.setStatus(Status.BLOCKED)
+        def request = new JwtAuthenticationRequest()
+        request.setMail("example.com")
+        request.setPassword("1234")
+        def entity = new UserEntity()
+        entity.setStatus(Status.BLOCKED)
 
         when:
-            authenticationServiceImp.createAuthenticationToken(request)
+        authenticationServiceImp.createAuthenticationToken(request)
 
         then:
-            1 * userRepository.findByMail(request.getMail()) >> entity
-            thrown(AuthenticationException)
+        1 * userRepository.findByMail(request.getMail()) >> entity
+        thrown(AuthenticationException)
 
     }
 
     def "should throw NotFoundException if user is not found"() {
         given:
-            def request = new JwtAuthenticationRequest()
-            request.setMail("example.com")
-            request.setPassword("1234")
-            def entity = null
+        def request = new JwtAuthenticationRequest()
+        request.setMail("example.com")
+        request.setPassword("1234")
+        def entity = null
 
         when:
-            authenticationServiceImp.createAuthenticationToken(request)
+        authenticationServiceImp.createAuthenticationToken(request)
 
         then:
-            1 * userRepository.findByMail(request.getMail()) >> entity
-            thrown(NotFoundException)
+        1 * userRepository.findByMail(request.getMail()) >> entity
+        thrown(NotFoundException)
 
     }
 
     def "should throw WrongDataException if username and password are null"() {
         given:
-            def username = null
-            def password = null
+        def username = null
+        def password = null
         when:
-            authenticationServiceImp.authenticate(username, password)
+        authenticationServiceImp.authenticate(username, password)
 
         then:
-            thrown(WrongDataException)
+        thrown(WrongDataException)
 
     }
 
 
     def "don't throw WrongDataException if password and username are not null"() {
         given:
-            def username = "example@mail.ru"
-            def password = "12345"
+        def username = "example@mail.ru"
+        def password = "12345"
 
         when:
-            authenticationServiceImp.authenticate(username, password)
+        authenticationServiceImp.authenticate(username, password)
 
         then:
-            notThrown(WrongDataException)
+        notThrown(WrongDataException)
 
     }
 

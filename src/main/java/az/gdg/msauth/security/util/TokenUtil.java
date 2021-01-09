@@ -1,16 +1,21 @@
 package az.gdg.msauth.security.util;
 
+import az.gdg.msauth.security.model.TokenType;
 import az.gdg.msauth.security.model.dto.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultClock;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +30,22 @@ public class TokenUtil {
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration}")
-    private Long expiration;
+    private Key key;
+
+    @Value("${jwt.accessExpiration}")
+    private Long accessExpiration;
+
+    @Value("${jwt.refreshExpiration}")
+    private Long refreshExpiration;
+
+    @Value("${jwt.verifyTokenExpiration}")
+    private Long verifyTokenExpiration;
+
+    @PostConstruct
+    public void init() {
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
+    }
 
     public UserInfo getUserInfoFromToken(String token) {
         logger.info("UtilLog.getUserInfoFromToken.start");
@@ -61,26 +80,27 @@ public class TokenUtil {
     private Claims getAllClaimsFromToken(String token) {
         logger.info("UtilLog.getAllClaimsFromToken.start");
         return Jwts.parser()
-                .setSigningKey(secret)
+                .setSigningKey(key)
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    public String generateToken(String username, String userId, String role, String status) {
+    public String generateToken(String username, String userId, String role, String status, TokenType tokenType) {
         logger.info("UtilLog.generateToken.start.username : {}", username);
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
         claims.put("role", role);
         claims.put("status", status);
+        claims.put("tokenType", tokenType);
         logger.info("UtilLog.generateToken.stop.success.username : {}", username);
-        return doGenerateToken(claims, username, userId);
+        return doGenerateToken(claims, username, userId, tokenType);
     }
 
     public String doGenerateToken(Map<String, Object> claims,
-                                  String subject, String userId) {
+                                  String subject, String userId, TokenType tokenType) {
         logger.info("UtilLog.doGenerateToken.start.subject : {}", subject);
         Date createdDate = clock.now();
-        Date expirationDate = calculateExpirationDate(createdDate);
+        Date expirationDate = calculateExpirationDate(createdDate, tokenType);
         logger.info("UtilLog.doGenerateToken.stop.success.subject : {}", subject);
         return Jwts.builder()
                 .setClaims(claims)
@@ -88,25 +108,27 @@ public class TokenUtil {
                 .setId(userId)
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
+    // generated token will send via mail to user, then user clicks hiperlink and goes to verify-account endpoint
     public String generateTokenWithEmail(String mail) {
         logger.info("UtilLog.generateTokenWithEmail.start");
         Date createdDate = clock.now();
-        Date expirationDate = calculateExpirationDate(createdDate);
+        Date expiration = new Date(createdDate.getTime() + verifyTokenExpiration * 100);
         logger.info("UtilLog.generateTokenWithEmail.stop.success");
         return Jwts.builder()
                 .setSubject(mail)
                 .setIssuedAt(createdDate)
-                .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .setExpiration(expiration)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    private Date calculateExpirationDate(Date createdDate) {
+    private Date calculateExpirationDate(Date createdDate, TokenType tokenType) {
         logger.info("UtilLog.calculateExpirationDate.start");
+        long expiration = TokenType.ACCESS.equals(tokenType) ? accessExpiration : refreshExpiration;
         return new Date(createdDate.getTime() + expiration * 100);
     }
 

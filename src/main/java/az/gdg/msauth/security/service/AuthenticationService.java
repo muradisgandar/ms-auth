@@ -11,4 +11,6 @@ public interface AuthenticationService {
     void authenticate(String username, String password);
 
     UserInfo validateToken(String token);
+
+    JwtAuthenticationResponse refreshToken(String token);
 }

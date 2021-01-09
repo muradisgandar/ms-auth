@@ -1,6 +1,6 @@
 package az.gdg.msauth.security.config;
 
-import az.gdg.msauth.security.controller.EntryPointUnauthorizedHandler;
+import az.gdg.msauth.security.filter.TokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
@@ -18,10 +20,12 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final EntryPointUnauthorizedHandler unauthorizedHandler;
+    private final AuthenticationEntryPoint unauthorizedHandler;
+    private final TokenFilter tokenFilter;
 
-    public SecurityConfig(EntryPointUnauthorizedHandler unauthorizedHandler) {
+    public SecurityConfig(AuthenticationEntryPoint unauthorizedHandler, TokenFilter tokenFilter) {
         this.unauthorizedHandler = unauthorizedHandler;
+        this.tokenFilter = tokenFilter;
     }
 
     @Bean
@@ -47,9 +51,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .antMatcher("/api/auth/**")
                 .authorizeRequests()
                 .anyRequest().authenticated();
+
     }
 
 
