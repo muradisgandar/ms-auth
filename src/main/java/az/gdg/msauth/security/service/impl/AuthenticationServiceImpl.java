@@ -100,8 +100,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return tokenUtil.getUserInfoFromToken(token);
     }
 
-    // if token is valid , then it is extracted in TokenFilter after a few operations(see TokenFilter)
-    // Authentication object is set to SecurityContext
+    // in TokenFilter , if token is valid , Authentication object is set to SecurityContext after a few operations(see TokenFilter)
     @Override
     public JwtAuthenticationResponse refreshToken(String token) {
 
